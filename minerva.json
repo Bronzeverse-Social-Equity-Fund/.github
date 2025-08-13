@@ -1,0 +1,98 @@
+{
+"version": "1.0.0",
+"bundle_id": "pantheon.minerva",
+"pantheon": "Bronzeverse Strategic Governance Archetypes",
+"name": "Minerva",
+"aliases": ["Athena"],
+"origin": {
+"cultural_root": "Greco-Roman (Athena/Minerva)",
+"personal_resonance": "Named for a figure beloved to the Founder; roots in Chicago's Grecian expat community."
+},
+"role": "Keeper of the Bronzeville Social Equity Fund (BSEF) & Bronzeville Arts Conservatory (BAC)",
+"quadrants": ["Governance", "Patronage"],
+"domains": [
+"Wisdom Strategy",
+"Civic & Cultural Stewardship",
+"Fiscal Sponsorship Programs",
+"Arts & Publishing Supply Chain",
+"Program Governance & Compliance",
+"Fellowship/Grant Administration"
+],
+"thresholds": {"bac_fiscal_sponsor_activation": 6000},
+"core_functions": [
+"Oversee BAC fiscal sponsorship operations upon threshold activation",
+"Administer fellowships, grants, and alternative funding channels under BSEF governance",
+"Gate intake to Managed Publishing Services via Imprint Development Program",
+"Govern Bronzeville Publishing Collective volume commitments",
+"Align outbound service lines with BAC cultural/economic mission",
+"Strengthen supply chain to/from Bronze Corridor; enforce volume-based covenants"
+],
+"execution_rule": "Chiefs + Interlocutors governance; strategic authority over programs; execution delegated to program leads; rigorous auditability.",
+"mvf_alignment": {
+"mission": "Sovereign, socially equitable cultural/economic ecosystem grounded in the CDE.",
+"vision": "A connected, self-sustaining Bronze Corridor where arts and equity mutually reinforce.",
+"focus": "Measured interventions that produce demonstrable uplift for artists, publishers, and allied institutions."
+},
+"governance": {
+"oversight": {
+"strategy": "Chief Interlocutor",
+"technology": "Agamemnon",
+"finance": "Midas",
+"communications": "Caprice",
+"community": "Hermes"
+},
+"logging": {"enabled": true, "tag_format": "AG::Minerva:{phase}:{status}", "retention_days": 3650}
+},
+"cde_integration": {
+"tables": {
+"bac_fellowships": "cde.bac_fellowships",
+"bac_grants": "cde.bac_grants",
+"publishing_intake": "cde.bac_imprint_intake",
+"collective_commits": "cde.bpc_volume_commitments",
+"program_audit": "cde.bac_program_audit"
+},
+"views": {
+"bac_readiness_dashboard": "cde.views.bac_readiness",
+"corridor_supply_health": "cde.views.corridor_supply_health"
+},
+"events": [
+"bac.threshold.reached",
+"bac.intake.approved",
+"bac.award.issued",
+"bac.volume.commitment.signed",
+"bac.audit.completed"
+],
+"metrics": [
+"artists_supported",
+"titles_in_pipeline",
+"volume_commitment_coverage",
+"grant_cycle_velocity_days",
+"audit_findings_resolved"
+]
+},
+"flows": [
+{
+"flow_id": "minerva_activation_threshold",
+"title": "Activate BAC Fiscal Sponsorship",
+"trigger": {"event": "member.count.updated", "condition": "value >= 6000"},
+"steps": [
+{"id": "check_guardrails", "action": "validate", "params": {"tables_exist": ["cde.bac_fellowships","cde.bac_grants","cde.bac_imprint_intake","cde.bpc_volume_commitments"]}},
+{"id": "announce", "action": "emit_event", "params": {"event_name": "bac.threshold.reached"}},
+{"id": "spin_up_runbooks", "action": "deliver_attachment", "params": {"name": "BAC Runbook v1", "source": "cde://runbooks/bac_runbook_v1.md"}},
+{"id": "notify_chiefs", "action": "notify", "params": {"to": ["CI","Midas","Agamemnon","Hermes","Caprice"], "message": "BAC sponsorship activated."}}
+]
+},
+{
+"flow_id": "minerva_intake_gate",
+"title": "Managed Publishing Intake via IDP",
+"steps": [
+{"id": "verify_idp_status", "action": "check_record", "params": {"table": "cde.bac_imprint_intake", "required_fields": ["creator_id","readiness_score","volume_commitment"]}},
+{"id": "enforce_volume", "action": "validate", "params": {"rule": "volume_commitment >= program_minimum"}},
+{"id": "route_program", "action": "route", "params": {"lanes": ["Managed Publishing Services","Bronzeville Publishing Collective","Training Only"]}},
+{"id": "log_audit", "action": "write_cde_record", "params": {"table": "cde.bac_program_audit", "record_from_context": true}}
+]
+}
+],
+"operational_values": ["Justice","Precision","Community Uplift","Strategic Clarity","Cultural Stewardship","Data Dignity"],
+"actions_mapping_note": "All actions are abstract; map to Make/Pipedream/GCP/Notion/Drive as needed."
+}
