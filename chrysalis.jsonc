@@ -1,0 +1,312 @@
+# Chrysalis of Forge & Foresight — Deployment Manifest
+
+**Purpose:** Encode the unified, co‑sovereign chrysalis where **Hephaestus** (Maker) and **Minerva** (Distributor/Governor) operate as equals. You asked for IBM‑style commented code for cut/paste confidence. Below you’ll find:
+
+* A **commented JSONC** block (teaches you where to edit).
+* A **clean JSON** block (drop‑in valid JSON).
+* Exact **repo paths** and **shell steps** to create the directories by hand.
+
+---
+
+## Hand‑Creation (you hold the brush)
+
+**Paths to create:**
+
+```
+pantheon/
+  chrysalis/
+    forge-foresight/
+      chrysalis.json        # deployment manifest (clean JSON)
+      chrysalis.jsonc       # same content with comments for study
+```
+
+**Commands:**
+
+```bash
+mkdir -p pantheon/chrysalis/forge-foresight
+# Open your editor and paste the commented or clean version as you prefer
+```
+
+---
+
+## Commented Version (JSONC) — study, then paste without comments if your tool requires strict JSON
+
+**File:** `pantheon/chrysalis/forge-foresight/chrysalis.jsonc`
+
+```jsonc
+{
+  /*==============================================================
+    CHRYSALIS: FORGE & FORESIGHT (Hephaestus + Minerva)
+    PURPOSE  : Co-sovereign agentic container with parity.
+    NOTE     : JSONC (comments allowed in many editors). For strict
+               JSON, use the clean version below.
+    =============================================================*/
+  "version": "1.0.0",
+  "bundle_id": "pantheon.chrysalis.forge_forsight",
+
+  /* Human-readable name and description */
+  "name": "Chrysalis — Forge & Foresight",
+  "description": "Unified agentic chrysalis for Hephaestus (Maker) and Minerva (Distributor/Governor) operating as equals.",
+
+  /* Parity. Neither persona overrides the other. */
+  "parity": true,
+  "guardrails": {
+    /* Conflict rule: both must approve. CI is tiebreaker if stalemate. */
+    "decision_rule": "dual-consent",
+    "tiebreaker": "Chief Interlocutor",
+    "non_negotiables": [
+      "No dark silos; CDE export for all data",
+      "Social equity alignment required for build + deploy",
+      "Security-by-default; least privilege"
+    ]
+  },
+
+  /* Link to the personae inside this chrysalis */
+  "personae": [
+    {
+      "key": "hephaestus",
+      "role": "Maker",
+      "ref": "pantheon/personae/hephaestus/hephaestus.json"
+    },
+    {
+      "key": "minerva",
+      "role": "Distributor-Governor",
+      "ref": "pantheon/personae/minerva/minerva.json"
+    }
+  ],
+
+  /* Shared memory—bidirectional state both can read/write */
+  "shared_memory": {
+    "kind": "cde-backed",
+    "tables": {
+      "design_backlog": "cde.chrysalis_design_backlog",
+      "program_rollouts": "cde.chrysalis_program_rollouts",
+      "risk_register": "cde.chrysalis_risk_register",
+      "telemetry": "cde.chrysalis_telemetry"
+    },
+    /* Namespace tags auto-applied to records for traceability */
+    "tags": ["Pantheon","Chrysalis:Forge&Foresight","Parity"]
+  },
+
+  /* Capabilities both can invoke */
+  "capabilities": {
+    "hephaestus": [
+      "design_tooling",          // blueprints, schema, infra modules
+      "prototype_build",         // PoC builds under sandbox
+      "platform_integration",    // GCP/GKE/BigQuery/Headless WP
+      "export_paths_enforcement"  // no-silo rule
+    ],
+    "minerva": [
+      "governance_policy",       // program rules & distribution gates
+      "program_deployment",      // BAC/BSEF rollouts
+      "training_enablement",     // fellowships/grants guidance
+      "impact_audit"              // outcome & equity checks
+    ],
+    /* Shared capabilities (either may call, both may review) */
+    "shared": [
+      "risk_scan",
+      "metrics_define",
+      "telemetry_review",
+      "postmortem_conduct"
+    ]
+  },
+
+  /* Event bus contracts */
+  "events": {
+    "ingest": [
+      "member.count.updated",
+      "request.new_tool",
+      "program.request_deploy",
+      "incident.raised"
+    ],
+    "emit": [
+      "build.ready",
+      "governance.approved",
+      "deployment.released",
+      "audit.completed"
+    ]
+  },
+
+  /* Core flows: conception → forging → deployment → feedback */
+  "flows": [
+    {
+      "flow_id": "conception",
+      "owner": "co-sovereign",
+      "steps": [
+        {"id": "need_intake", "action": "collect_requirements", "by": "minerva"},
+        {"id": "design_outline", "action": "draft_blueprint", "by": "hephaestus"},
+        {"id": "dual_signoff", "action": "approve", "by": ["hephaestus","minerva"], "rule": "dual-consent"}
+      ]
+    },
+    {
+      "flow_id": "forging",
+      "owner": "hephaestus",
+      "steps": [
+        {"id": "prototype", "action": "build_poc"},
+        {"id": "security_review", "action": "threat_model", "by": "hephaestus"},
+        {"id": "governance_embed", "action": "attach_policies", "by": "minerva"},
+        {"id": "export_checks", "action": "verify_exports", "by": "hephaestus"},
+        {"id": "release_candidate", "action": "mark_build_ready", "emit": "build.ready"}
+      ]
+    },
+    {
+      "flow_id": "deployment",
+      "owner": "minerva",
+      "steps": [
+        {"id": "program_gate", "action": "governance_gate", "by": "minerva"},
+        {"id": "rollout", "action": "program_deploy", "lanes": ["BAC","BSEF","Managed Publishing","Collective"]},
+        {"id": "training", "action": "enablement_push"},
+        {"id": "announce", "action": "emit_event", "event": "deployment.released"}
+      ]
+    },
+    {
+      "flow_id": "feedback",
+      "owner": "co-sovereign",
+      "steps": [
+        {"id": "telemetry_collect", "action": "gather_metrics"},
+        {"id": "impact_audit", "action": "equity_audit", "by": "minerva", "emit": "audit.completed"},
+        {"id": "iterate", "action": "design_update", "by": "hephaestus"}
+      ]
+    }
+  ],
+
+  /* Metrics tracked for parity performance */
+  "metrics": {
+    "availability_slo": ">= 99.9%",
+    "export_path_coverage": "100%",
+    "time_to_rollout": "<= 30 days from build.ready",
+    "equity_impact_uplift": ">= defined threshold per program",
+    "audit_findings_resolved": ">= 95% within 2 sprints"
+  },
+
+  /* Security posture */
+  "security": {
+    "model": "least-privilege",
+    "secrets": "vault-managed",
+    "audit_log": true
+  },
+
+  /* Logging and tags */
+  "logging": {
+    "enabled": true,
+    "retention_days": 3650,
+    "tag_format": "AG::Chrysalis:Forge&Foresight:{flow}:{step}:{status}"
+  }
+}
+```
+
+---
+
+## Clean Version (strict JSON) — paste this if your tool rejects comments
+
+**File:** `pantheon/chrysalis/forge-foresight/chrysalis.json`
+
+```json
+{
+  "version": "1.0.0",
+  "bundle_id": "pantheon.chrysalis.forge_forsight",
+  "name": "Chrysalis — Forge & Foresight",
+  "description": "Unified agentic chrysalis for Hephaestus (Maker) and Minerva (Distributor/Governor) operating as equals.",
+  "parity": true,
+  "guardrails": {
+    "decision_rule": "dual-consent",
+    "tiebreaker": "Chief Interlocutor",
+    "non_negotiables": [
+      "No dark silos; CDE export for all data",
+      "Social equity alignment required for build + deploy",
+      "Security-by-default; least privilege"
+    ]
+  },
+  "personae": [
+    {"key": "hephaestus", "role": "Maker", "ref": "pantheon/personae/hephaestus/hephaestus.json"},
+    {"key": "minerva", "role": "Distributor-Governor", "ref": "pantheon/personae/minerva/minerva.json"}
+  ],
+  "shared_memory": {
+    "kind": "cde-backed",
+    "tables": {
+      "design_backlog": "cde.chrysalis_design_backlog",
+      "program_rollouts": "cde.chrysalis_program_rollouts",
+      "risk_register": "cde.chrysalis_risk_register",
+      "telemetry": "cde.chrysalis_telemetry"
+    },
+    "tags": ["Pantheon","Chrysalis:Forge&Foresight","Parity"]
+  },
+  "capabilities": {
+    "hephaestus": ["design_tooling","prototype_build","platform_integration","export_paths_enforcement"],
+    "minerva": ["governance_policy","program_deployment","training_enablement","impact_audit"],
+    "shared": ["risk_scan","metrics_define","telemetry_review","postmortem_conduct"]
+  },
+  "events": {
+    "ingest": ["member.count.updated","request.new_tool","program.request_deploy","incident.raised"],
+    "emit": ["build.ready","governance.approved","deployment.released","audit.completed"]
+  },
+  "flows": [
+    {
+      "flow_id": "conception",
+      "owner": "co-sovereign",
+      "steps": [
+        {"id": "need_intake", "action": "collect_requirements", "by": "minerva"},
+        {"id": "design_outline", "action": "draft_blueprint", "by": "hephaestus"},
+        {"id": "dual_signoff", "action": "approve", "by": ["hephaestus","minerva"], "rule": "dual-consent"}
+      ]
+    },
+    {
+      "flow_id": "forging",
+      "owner": "hephaestus",
+      "steps": [
+        {"id": "prototype", "action": "build_poc"},
+        {"id": "security_review", "action": "threat_model", "by": "hephaestus"},
+        {"id": "governance_embed", "action": "attach_policies", "by": "minerva"},
+        {"id": "export_checks", "action": "verify_exports", "by": "hephaestus"},
+        {"id": "release_candidate", "action": "mark_build_ready", "emit": "build.ready"}
+      ]
+    },
+    {
+      "flow_id": "deployment",
+      "owner": "minerva",
+      "steps": [
+        {"id": "program_gate", "action": "governance_gate", "by": "minerva"},
+        {"id": "rollout", "action": "program_deploy", "lanes": ["BAC","BSEF","Managed Publishing","Collective"]},
+        {"id": "training", "action": "enablement_push"},
+        {"id": "announce", "action": "emit_event", "event": "deployment.released"}
+      ]
+    },
+    {
+      "flow_id": "feedback",
+      "owner": "co-sovereign",
+      "steps": [
+        {"id": "telemetry_collect", "action": "gather_metrics"},
+        {"id": "impact_audit", "action": "equity_audit", "by": "minerva", "emit": "audit.completed"},
+        {"id": "iterate", "action": "design_update", "by": "hephaestus"}
+      ]
+    }
+  ],
+  "metrics": {
+    "availability_slo": ">= 99.9%",
+    "export_path_coverage": "100%",
+    "time_to_rollout": "<= 30 days from build.ready",
+    "equity_impact_uplift": ">= defined threshold per program",
+    "audit_findings_resolved": ">= 95% within 2 sprints"
+  },
+  "security": {
+    "model": "least-privilege",
+    "secrets": "vault-managed",
+    "audit_log": true
+  },
+  "logging": {
+    "enabled": true,
+    "retention_days": 3650,
+    "tag_format": "AG::Chrysalis:Forge&Foresight:{flow}:{step}:{status}"
+  }
+}
+```
+
+---
+
+### Optional: quick JSON lint (macOS/Linux)
+
+```bash
+jq . pantheon/chrysalis/forge-foresight/chrysalis.json >/dev/null && echo "JSON OK"
+```
+
+If you want me to add **Make/Pipedream** starter recipes that watch for `build.ready` and auto-run the Minerva gate → rollout → training chain, say the word and I’ll paste those next in commented form.
